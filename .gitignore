@@ -1,0 +1,12 @@
+# Compiled interview test binaries
+interview-session*/run_tests
+!interview-session*/run_tests.*
+
+# Build artifacts
+*.o
+*.out
+a.out
+.vscode/
+
+# Wall-clock timing sentinels (ephemeral, not meaningful outside a live session)
+interview-session*/.started_at
