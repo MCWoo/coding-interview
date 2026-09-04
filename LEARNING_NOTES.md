@@ -31,3 +31,27 @@ callback, not something `reduce` does on its own — pass any lambda (max,
 string concatenation, building up an object) and it does that instead. If
 no initial value is given, the first array element is used as the starting
 accumulator and reduction starts from index 1.
+
+## C++: what does `auto` mean in a lambda's parameter list?
+
+Asked while discussing a `binarySearch(hi, auto predicate)` helper lambda
+written outside a formal interview session (general binary-search
+discussion, LeetCode #74).
+
+It makes the lambda a **generic lambda** (C++14+): the closure's
+`operator()` becomes a template, with the parameter's type deduced per
+call site — the same deduction rules as an ordinary template parameter
+(pass-by-value, decays arrays/top-level cv-qualifiers; write `const
+auto&` to bind by reference instead). Passing two differently-typed
+lambdas to the same `auto`-parameter function generates two separate
+compile-time instantiations of `operator()`, with no virtual dispatch or
+`std::function`-style type erasure involved — this is what makes the
+pattern zero-cost.
+
+This is distinct from bare `auto` as a parameter type in an *ordinary*
+(non-lambda) function, e.g. `void foo(auto x)` — that's a separate,
+C++20-only feature ("abbreviated function templates"); the lambda version
+works back to C++14. It's also a different job for the same keyword than
+`auto` used for variable-type deduction (e.g. `auto binarySearch = [...]`
+deduces the *variable's* type from its initializer — unrelated to
+parameter-type templating, despite reusing the same keyword).
