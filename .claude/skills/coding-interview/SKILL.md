@@ -122,7 +122,15 @@ prefers typing them that way.
    - Edge cases worth being aware of, if not obvious from constraints
 
    For DSA problems, follow up immediately with a four-file bundle in the
-   chosen language. Read `references/starter_templates.md` for the shared
+   chosen language, in a **sequentially-numbered session directory**:
+   `session-01/`, `session-02/`, etc. (zero-padded two digits), incrementing
+   from whatever `session-NN` directories already exist in the working
+   directory. Never name the directory after the category or problem —
+   the candidate may reread old sessions later, and a folder called
+   `session-07-dynamic-programming` gives away the category before they've
+   even opened it.
+
+   Read `references/starter_templates.md` for the shared
    rules, then read only the one file under `references/languages/` that
    matches the candidate's chosen language (`python.md`, `javascript.md`,
    `java.md`, `go.md`, or `cpp.md`) for the actual code shape — no need to

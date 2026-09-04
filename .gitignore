@@ -1,4 +1,4 @@
 # Practice interview session bundles (problem statements, candidate
 # solutions, hidden reference solutions, test harnesses) — personal
 # practice history, not part of the skill itself.
-interview-session*/
+session-[0-9][0-9]/
