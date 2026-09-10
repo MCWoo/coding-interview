@@ -55,3 +55,36 @@ works back to C++14. It's also a different job for the same keyword than
 `auto` used for variable-type deduction (e.g. `auto binarySearch = [...]`
 deduces the *variable's* type from its initializer — unrelated to
 parameter-type templating, despite reusing the same keyword).
+
+## Algorithms: what is "sweep line"?
+
+Asked after a mock interview session (`greedy_intervals`, "Deployment
+Freeze Windows") where the candidate independently arrived at the pattern
+(tracking start/end timepoints on a timeline rather than the intervals
+themselves) without knowing its name.
+
+Sweep line is the general pattern of reducing "reason about every point
+on a number line/plane" down to "reason only about the finite set of
+points where something could change." Concretely: turn every
+object/interval into one or more **events** at specific positions (e.g. a
+"start" and an "end" event per interval), **sort the events by
+position**, then **walk through them in order**, updating some running
+state at each one and emitting output whenever that state crosses a
+condition of interest. Complexity is almost always O(n log n) (the sort)
++ O(n) (the single linear walk).
+
+Common applications: interval merging, "max overlapping meetings" style
+problems, the skyline problem, calendar conflict detection, and (in 2D)
+computational geometry — segment intersection, closest pair of points,
+rectangle union area, sweeping a line across the plane while maintaining
+an active set of shapes the line currently crosses.
+
+The classic failure mode, and the one that actually surfaced a real bug
+in the candidate's solution this session: when multiple events land at
+the *exact same position*, their relative processing order matters (e.g.
+whether one interval's "end" event or a different interval's "start"
+event, at the same coordinate, is treated as happening first), and
+sorting by position alone doesn't specify it. The fix is always to give
+the comparator an explicit secondary key (an event-type rank) so ties
+resolve the way the problem's semantics need, rather than leaving it to
+however the sort implementation happens to break ties.
