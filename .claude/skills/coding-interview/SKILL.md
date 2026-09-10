@@ -167,8 +167,12 @@ prefers typing them that way.
    against a correct candidate answer, which is worse than not verifying at
    all. Tell the candidate once, when you hand the files over, that
    `interviewer_only/` holds the answer and the exercise depends on them not
-   opening it — same honor system as not flipping to the back of an answer
-   key early.
+   opening it during the session — same honor system as not flipping to
+   the back of an answer key early. It's fair game to actually read once
+   the session's over, though (see `references/starter_templates.md` for
+   why it's worth writing that file readably in the first place), so
+   mention that too — a candidate who wants to study the reference
+   solution afterward shouldn't have to guess that it's there for that.
 
    For `system_design` / `object_oriented_design` / discussion-shaped
    `senior_scenarios` problems, there's usually no starter script — see the
@@ -187,6 +191,12 @@ prefers typing them that way.
    diff it against the wall clock later instead of asking the candidate to
    estimate or eyeballing it from how long the conversation feels, both of
    which drift on anything longer than a few minutes.
+
+   **Also schedule this session's check-ins here** — read
+   `references/scheduled_checkins.md` for the mechanics: a recurring job
+   that silently re-reads the candidate's working file every few minutes
+   (real process signal for later, not just the final diff), plus, for
+   timed sessions, proactive halfway/10-min/2-min/end-time reminders.
 
 5. **Conduct the interview.** See "Being the interviewer" below. This is the
    bulk of the session.
@@ -353,25 +363,25 @@ than logging a level based on a claim you didn't verify.
 
 ## Tracking time
 
-You don't get a background timer, so track time by checking the wall clock
-against the stated end-time whenever it's natural (candidate sends a
-message, finishes a chunk of work, asks a question). Run `date +%H:%M` and
-compare. Give a spoken update at roughly the halfway point, ~10 minutes
-remaining, and ~2 minutes remaining — briefly, without derailing their
-focus ("quick heads up, about 10 minutes left").
+For timed sessions, time updates should already be arriving on their own
+via the check-ins scheduled in step 4 (see `references/scheduled_checkins.md`)
+— proactive nudges at roughly halfway, ~10 minutes remaining, ~2 minutes
+remaining, and time's-up, without needing the candidate to message you near
+any of those moments. Treat that as primary, but don't rely on it
+exclusively: if a check-in didn't fire for some reason, fall back to
+checking the wall clock yourself whenever it's natural to (`date +%H:%M`
+against the stated end-time). Either way, if time runs out mid-problem,
+treat it like a real interview would — let them know time's up, ask if
+they want a couple more minutes or want to stop where they are, and move
+to feedback either way. Don't silently let the session run long without
+saying anything.
 
-If they're self-timed instead, you don't need to give any of those spoken
-updates — just wait for them to say they're done. But you still captured a
-real start timestamp when you handed over the problem (see step 4 of the
-session flow), and that matters even here: it's what lets you log an
-accurate duration afterward instead of asking the candidate to guess how
-long it took them, which is exactly the kind of number that's easy to
-misremember on a 40-minute session.
-
-If time runs out mid-problem, treat it like a real interview would: let them
-know time's up, ask if they want a couple more minutes to finish a thought
-or want to stop where they are, and move to feedback either way. Don't
-silently let the session run long without saying anything.
+If they're self-timed, none of the deadline-related updates apply — just
+wait for them to say they're done. But you still captured a real start
+timestamp when you handed over the problem, and that matters even here:
+it's what lets you log an accurate duration afterward instead of asking
+the candidate to guess how long it took them, which is exactly the kind of
+number that's easy to misremember on a 40-minute session.
 
 ## Wrapping up
 
@@ -404,6 +414,14 @@ When the problem session actually ends:
    think of" in `references/starter_templates.md` for why). Use whatever
    you find as real material for the code-quality feedback below, whether
    it holds up or not.
+
+   If you scheduled the periodic silent-read check-in from step 4, also
+   read `<problem-dir>/.interviewer_notes` now if it exists — a real record
+   of process (dead ends, backtracking) a single final read can't
+   reconstruct — and fold anything useful into the feedback below. See "At
+   wrap-up" in `references/scheduled_checkins.md` for cleanup: cancel every
+   cron job from this session and delete `.interviewer_notes` once used;
+   neither should outlive the session.
 
    Also **ask about time and space complexity here if you haven't already
    gotten a clear answer on both during the interview.** This is a standard
@@ -463,7 +481,9 @@ When the problem session actually ends:
    ```
    Tell the candidate what changed ("moved dynamic_programming from weak to
    developing") so progress is visible, the same way you'd want to hear it
-   after a real interview debrief.
+   after a real interview debrief. Also remind them `interviewer_only/`
+   is theirs to read now, in case they want to compare notes or study it
+   later — the honor system was only ever about the session itself.
 
 ## Checking progress outside a session
 

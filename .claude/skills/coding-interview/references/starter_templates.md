@@ -66,6 +66,15 @@ in the moment — just don't do it preemptively for every session.
   implementation of the problem, in a subfolder whose name signals "not for
   you." This is what makes real verification possible — `run_tests` calls
   it to compute expected output and diffs it against the candidate's output.
+  **Write it the way you'd want a study reference to read** — descriptive
+  variable/function names, and a short comment wherever the "why" of a step
+  isn't obvious from the code alone — not the terse, single-letter-variable
+  style that's fine for a private scratch verification script. The honor
+  system only asks the candidate not to open this *during* the session;
+  once it's over, it's a legitimate thing for them to read afterward to see
+  a clean solution laid out (see "Wrapping up" in `SKILL.md`), and a
+  reference that's hard to follow defeats that purpose even though it still
+  computes the right answer either way.
 - **`run_tests.*`**: imports both, runs every test case through both
   implementations, and prints a clear PASS/FAIL per case with input, the
   candidate's actual output, and the expected output. **The default test
