@@ -88,3 +88,32 @@ sorting by position alone doesn't specify it. The fix is always to give
 the comparator an explicit secondary key (an event-type rank) so ties
 resolve the way the problem's semantics need, rather than leaving it to
 however the sort implementation happens to break ties.
+
+## How are system design interviews actually assessed?
+
+Asked after a live system design session (`session-08`, a self-service
+cloud platform problem) where the candidate asked whether the interview
+had even been addressed properly, since there's no test suite the way
+there is for a DS&A problem.
+
+System design loops don't have a ground-truth answer to check against, so
+assessment rests on *how* a candidate reasons, scored across roughly six
+recurring axes: requirements gathering, high-level architecture, deep-dive
+technical depth, trade-off reasoning (consistently reported as the single
+most differentiating axis — a choice only earns credit once the tension
+behind it is actually named out loud), scalability/operational awareness
+(expect numbers and a specific bottleneck at senior level, not just "we'd
+add a cache"), and communication (thinking out loud, not reconstructed
+after the fact when asked).
+
+The bar on each axis rises with seniority rather than new axes appearing —
+a senior+ candidate is expected to drive requirements-gathering themselves
+and surface a requirement the prompt never stated, where a mid-level
+candidate answering clarifying questions when prompted is already fine. A
+common real failure mode is spending too long on requirements/high-level
+sketching and never reaching the deep dive, which is where the strongest
+signal actually lives.
+
+Full writeup, including how this maps onto this project's five-level skill
+ladder, lives in
+`.claude/skills/coding-interview/references/system_design_assessment.md`.

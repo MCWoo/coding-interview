@@ -462,6 +462,14 @@ When the problem session actually ends:
    approach, that caps how high the assessed level can go regardless of how
    clean the resulting code was.
 
+   For `system_design` and the design-shaped parts of `senior_scenarios` /
+   `object_oriented_design`, there's no test suite to anchor on — read
+   `references/system_design_assessment.md` for the six axes real system
+   design loops actually score (requirements gathering, architecture, deep
+   dive, trade-off reasoning, scalability, communication), how the bar for
+   each one rises with seniority, and how to structure feedback around
+   whichever axes were load-bearing for that specific problem.
+
 4. **Compute the real duration and record the results.** Don't ask the
    candidate how long it took — diff the wall clock against the timestamp
    you captured at hand-off: `echo $(( ($(date +%s) - $(cat <problem-dir>/.started_at) + 30) / 60 ))`

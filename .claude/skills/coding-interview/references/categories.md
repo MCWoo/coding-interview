@@ -27,7 +27,7 @@ differently.
 - `heaps_priority_queues` — heaps, top-k, merge-k problems
 
 **Beyond LeetCode — senior/principal territory**
-- `system_design` — design a system at scale (e.g. "design a URL shortener", "design a rate limiter"): requirements gathering, high-level architecture, data model, scaling bottlenecks, tradeoffs
+- `system_design` — design a system at scale (e.g. "design a URL shortener", "design a rate limiter"): requirements gathering, high-level architecture, data model, scaling bottlenecks, tradeoffs. See `references/system_design_assessment.md` for how to actually assess a session in this category — the generic level ladder below still applies, but there's no test suite to anchor on, so that file breaks down what "proficient" vs. "strong" trade-off reasoning or scalability reasoning actually looks like.
 - `object_oriented_design` — design classes/interfaces for a bounded problem (e.g. "design a parking garage", "design an elevator system"): OOP modeling, extensibility, edge cases
 - `senior_scenarios` — grab-bag for other senior/principal-shaped problems: debugging a gnarly incident from a code snippet + logs, reviewing a PR for correctness/scale issues, API design (REST/gRPC contract for a described feature), concurrency bugs (race conditions, deadlocks), tradeoff discussions ("how would you migrate X with zero downtime")
 

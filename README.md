@@ -28,6 +28,11 @@ sessions so difficulty ramps appropriately over time.
   files), asks about time/space complexity, gives direct feedback on your
   approach and code quality, and updates your tracked skill level for that
   category.
+- For system design (no test suite to fall back on), assesses against the
+  six axes real system design loops actually score — requirements
+  gathering, architecture, deep-dive depth, trade-off reasoning,
+  scalability, communication — detailed in
+  `.claude/skills/coding-interview/references/system_design_assessment.md`.
 - Supports adding your own specialized categories (e.g. "game physics",
   "network engineering") by hand or derived from a pasted/linked job
   description.
