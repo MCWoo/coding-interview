@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Observability cheat sheet</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<h1>Observability cheat sheet</h1>
+<p class="lede">Quick reference — see
+<a href="../lessons/0003-observability-pillars-multicloud.html">Lesson 3</a>
+for the full explanation.</p>
+
+<h2>Three signals</h2>
+<table style="width:100%; border-collapse: collapse; margin: 1rem 0;">
+<tr><td style="padding:0.4rem 0.6rem; border-bottom:1px solid var(--rule); font-weight:600;">Metrics</td>
+<td style="padding:0.4rem 0.6rem; border-bottom:1px solid var(--rule);">Numbers over time. Cheap, basis for alerting/dashboards.</td></tr>
+<tr><td style="padding:0.4rem 0.6rem; border-bottom:1px solid var(--rule); font-weight:600;">Logs</td>
+<td style="padding:0.4rem 0.6rem; border-bottom:1px solid var(--rule);">Discrete timestamped events with full detail.</td></tr>
+<tr><td style="padding:0.4rem 0.6rem; font-weight:600;">Traces</td>
+<td style="padding:0.4rem 0.6rem;">A request's path across services, as spans.</td></tr>
+</table>
+
+<p><strong>Monitoring</strong> says a problem exists. <strong>Observability</strong>
+is having enough signal to figure out why, for a question you didn't predict
+in advance.</p>
+
+<h2>Why native tools alone don't solve cross-cloud visibility</h2>
+<p>CloudWatch (AWS) and Azure Monitor (Azure) are both fine within their own
+cloud — neither knows the other exists. "Use the native tool" quietly
+answers "what's running in this one cloud," not the actual requirement.</p>
+
+<h2>Two real approaches</h2>
+<ol>
+<li><strong>Federation/aggregation layer</strong> — a vendor-neutral
+collector (e.g. an OpenTelemetry Collector) runs in both clouds and ships
+all three signals to one shared backend.</li>
+<li><strong>Consistent resource tagging</strong> — every resource in both
+clouds needs the same tags (owner, environment, cost-center) or no query
+layer can answer "what's running and whose is it," regardless of pipeline
+sophistication. Enforce this at the same layer as security guardrails
+(e.g. a Terraform module that requires tags to provision).</li>
+</ol>
+
+<p class="primary-source">Official docs:
+<a href="https://opentelemetry.io/docs/concepts/signals/" target="_blank" rel="noopener">OpenTelemetry: Concepts — Signals</a> ·
+<a href="https://prometheus.io/docs/introduction/overview/" target="_blank" rel="noopener">Prometheus: Overview</a></p>
+
+<div class="callout">
+No official source directly documents "cross-cloud visibility" as its own
+named problem (see <code>RESOURCES.md</code> → Gaps) — the two-approaches
+framing above is a synthesis, reasonable but worth treating as your own
+reasoning in an interview, not a quoted best practice.
+</div>
+
+</body>
+</html>

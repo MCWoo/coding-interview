@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ansible idempotency and the Terraform drift bug</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<h1>Ansible idempotency and the Terraform drift bug</h1>
+<p class="lede">Lesson 2 of 3 — this one rebuilds the exact bug from
+session-08: a default password rotated quickly by Ansible, reset right back
+by the next <code>terraform apply</code>.</p>
+
+<p>In the interview, the proposal was: ship a default password, then have
+Ansible rotate it fast. The bug wasn't caught until a follow-up question
+forced it out — the goal here is to make that bug obvious <em>before</em>
+proposing the design, not after.</p>
+
+<h2>What idempotency actually promises</h2>
+
+<p>Ansible's core design idea: running the same playbook twice should produce
+the same end state as running it once. A task either reports "changed"
+(it did something) or "ok" (the system already matched the desired state,
+so it did nothing). This is what lets you re-run a playbook safely instead
+of tracking by hand whether it's already been applied.</p>
+
+<div class="callout">
+That promise is about <em>Ansible's own view</em> of the system converging.
+It says nothing about what happens when a <em>second</em> tool — Terraform,
+in this case — has its own independent idea of what the correct state is,
+and periodically re-asserts it.
+</div>
+
+<div class="quiz" data-answer="changed">
+<p class="question">Fill in the blank: when an Ansible task actually does something because the system didn't already match the desired state, it reports ____.</p>
+<form onsubmit="return checkQuiz(this)">
+  <input type="text" autocomplete="off">
+  <button type="submit">Check</button>
+  <p class="feedback"></p>
+</form>
+</div>
+
+<h2>Reconstructing the bug</h2>
+
+<p>Walk the sequence from session-08 step by step:</p>
+<ol>
+<li>Terraform provisions a resource with a default password baked into its
+config (or a variable it set).</li>
+<li>Ansible runs afterward and rotates that password to something new — as
+far as Ansible is concerned, this converges the system to the "rotated"
+desired state, and it reports success.</li>
+<li>Later, anyone (a teammate, a CI job, a scheduled drift-detection run)
+runs <code>terraform apply</code> again.</li>
+<li>Terraform compares the live resource against <em>its own</em> state file
+— which still says "default password" — sees a difference, and "fixes" it
+by writing the default password back.</li>
+</ol>
+
+<p>Nothing in step 4 is a bug in Terraform. Terraform is doing exactly what
+it's designed to do: reconcile reality against its recorded state. The bug
+is architectural — two systems each believe they alone own the same piece
+of data, and neither one knows about the other's writes.</p>
+
+<div class="callout warning">
+<strong>The generalizable lesson, not just this one bug:</strong> any time a
+design has two different tools capable of writing to the same field/value,
+ask "what happens when both decide to act on it independently?" before
+asking whether either tool individually works. This is the trade-off-framing
+move from the interview feedback — naming the tension before being asked
+about it.
+</div>
+
+<h2>What actually breaks the tie</h2>
+
+<p>The fix the candidate eventually reached in the interview (correctly,
+once reached): let the <em>cloud-managed service itself</em> own credential
+generation — e.g. a managed database's own integration with a secrets
+manager generates and stores the credential directly. Terraform's job
+shrinks to granting IAM access to that secret, not generating or holding
+the value. This removes the second writer entirely, rather than trying to
+choreograph two writers more carefully.</p>
+
+<p class="primary-source">Primary sources — read before the next session:
+<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_intro.html" target="_blank" rel="noopener">Ansible: Introduction to Playbooks</a>
+(official docs, for idempotency/changed-state mechanics) and
+<a href="https://docs.ansible.com/ansible/latest/vault_guide/vault.html" target="_blank" rel="noopener">Ansible Vault</a>
+(official docs, for how Ansible's own answer to "don't commit a plaintext
+secret" compares to the Terraform-state-plaintext problem from the same
+session).</p>
+
+<div class="quiz" data-answer="iam access">
+<p class="question">In the fixed design, once a managed service generates its own credential directly into a secrets manager, what does Terraform's remaining job become (two words)?</p>
+<form onsubmit="return checkQuiz(this)">
+  <input type="text" autocomplete="off">
+  <button type="submit">Check</button>
+  <p class="feedback"></p>
+</form>
+</div>
+
+<p class="ask-your-teacher">Ask if you want to go deeper on Ansible Vault
+specifically, or on how this same "two writers, one value" pattern shows up
+outside secrets (e.g. autoscaling group sizes managed by both Terraform and
+a separate autoscaler).</p>
+
+<div class="nav-links">
+  <span><a href="0001-gitops-and-argocd-scope.html">← Back: GitOps &amp; Argo CD scope</a></span>
+  <span><a href="0003-observability-pillars-multicloud.html">Next: Observability across two clouds →</a></span>
+</div>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

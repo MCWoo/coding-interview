@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GitOps and what Argo CD actually owns</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<h1>GitOps and what Argo CD actually owns</h1>
+<p class="lede">Lesson 1 of 3 on the gaps from session-08 — this one targets the exact
+spot where the interview went sideways: treating Argo CD as something that
+deploys <em>infrastructure</em>.</p>
+
+<p>In the mock interview, the first instinct was "use Argo CD to deploy
+infrastructure." That got corrected mid-conversation, but it's worth
+rebuilding the idea from its foundation so the correction sticks on its own,
+without needing a nudge next time.</p>
+
+<h2>The inversion GitOps makes</h2>
+
+<p>A traditional CI/CD pipeline <strong>pushes</strong>: a job builds an
+artifact, then runs <code>kubectl apply</code> or similar from outside the
+cluster, reaching in to change it. GitOps flips this. A controller that
+already lives <strong>inside</strong> the cluster continuously compares the
+live state of the cluster against a Git repository, and <strong>pulls</strong>
+whatever changes are needed to make the two match. The pipeline's job shrinks
+to "update the repo" — the controller does the actual reaching-in.</p>
+
+<p>Argo CD is that controller. Its job, stated precisely: watch one or more
+Git repos containing Kubernetes manifests (or Helm charts, Kustomize
+overlays, etc.), and keep a target cluster/namespace in sync with what's
+declared there.</p>
+
+<div class="callout recall">
+<strong>This is the whole scope.</strong> Argo CD's unit of work is a
+Kubernetes manifest. It has no model of a cloud VM, a VPC, an IAM role, or a
+managed database — those don't exist in the Kubernetes API that Argo CD is
+watching. Anything upstream of "a cluster already exists and I have
+manifests to apply to it" is not Argo CD's job, full stop.
+</div>
+
+<div class="quiz" data-answer="manifests">
+<p class="question">Fill in the blank: Argo CD's unit of work is a Kubernetes ____.</p>
+<form onsubmit="return checkQuiz(this)">
+  <input type="text" autocomplete="off">
+  <button type="submit">Check</button>
+  <p class="feedback"></p>
+</form>
+</div>
+
+<h2>Three mechanics worth having cold</h2>
+
+<p>These three terms come up constantly once "Argo CD manages manifests" is
+established, because they're how it decides <em>what</em> to do when it
+notices a difference:</p>
+
+<ul>
+<li><strong>Sync</strong> — the act of reconciling: when the live cluster
+state doesn't match the Git-declared state (an "OutOfSync" Application),
+sync applies whatever's needed to converge them. Can be triggered manually
+or automatically.</li>
+<li><strong>Self-heal</strong> — off by default. If someone runs
+<code>kubectl edit</code> directly against a live resource, self-heal makes
+Argo CD notice the drift and revert it back to what Git says, rather than
+leaving the manual change in place.</li>
+<li><strong>Prune</strong> — also off by default, for safety. If a resource
+is deleted from the Git repo, pruning tells Argo CD to delete the
+corresponding live resource too, instead of just ignoring it.</li>
+</ul>
+
+<p class="primary-source">Primary source — read this before the next
+session: <a href="https://argo-cd.readthedocs.io/en/stable/core_concepts/" target="_blank" rel="noopener">Argo CD: Core Concepts</a>
+(official docs). For the sync/prune/self-heal mechanics specifically:
+<a href="https://argo-cd.readthedocs.io/en/stable/user-guide/auto_sync/" target="_blank" rel="noopener">Automated Sync Policy</a>.</p>
+
+<div class="quiz" data-answer="self-heal">
+<p class="question">Someone runs <code>kubectl edit</code> directly on a live resource. Which Argo CD feature (off by default) would revert that change back to match Git?</p>
+<form onsubmit="return checkQuiz(this)">
+  <input type="text" autocomplete="off">
+  <button type="submit">Check</button>
+  <p class="feedback"></p>
+</form>
+</div>
+
+<h2>Applying this back to the interview</h2>
+
+<p>The platform you designed in session-08 needed Argo CD to do exactly one
+job: once a cluster exists and the manifests are in a repo, keep workloads
+in sync with that repo. Everything before that point — provisioning the
+cluster itself, the VPC it sits in, the IAM roles it assumes — is Terraform
+territory, not Argo CD's. A clean way to say this out loud in an interview,
+unprompted: <em>"Argo CD picks up once there's a cluster and manifests to
+reconcile — everything before that is still Terraform's job."</em> That one
+sentence would have pre-empted the nudge you got last time.</p>
+
+<p class="ask-your-teacher">Something unclear, or want to go deeper on sync
+waves/hooks (ordering within a deploy) or the App-of-Apps pattern for
+managing many services at once? Ask — this is exactly what a teaching
+session is for.</p>
+
+<div class="nav-links">
+  <span>See also: <a href="../reference/argocd-cheatsheet.html">Argo CD cheat sheet</a></span>
+  <span><a href="0002-ansible-idempotency-and-terraform-drift.html">Next: Ansible idempotency &amp; the Terraform drift bug →</a></span>
+</div>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

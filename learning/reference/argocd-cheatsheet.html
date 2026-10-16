@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Argo CD cheat sheet</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<h1>Argo CD cheat sheet</h1>
+<p class="lede">Quick reference — see
+<a href="../lessons/0001-gitops-and-argocd-scope.html">Lesson 1</a> for the
+full explanation.</p>
+
+<h2>Scope, one line</h2>
+<p>Argo CD reconciles Kubernetes manifests against a Git repo. It has no
+model of cloud infrastructure (VMs, networking, IAM) — that's Terraform's
+job, finished before Argo CD ever acts.</p>
+
+<h2>Core object</h2>
+<p><strong>Application</strong> (a CRD) = a source (Git repo + path/branch,
+or a Helm/Kustomize reference) + a destination (target cluster + namespace).</p>
+
+<h2>Three mechanics</h2>
+<table style="width:100%; border-collapse: collapse; margin: 1rem 0;">
+<tr><td style="padding:0.4rem 0.6rem; border-bottom:1px solid var(--rule); font-weight:600;">Sync</td>
+<td style="padding:0.4rem 0.6rem; border-bottom:1px solid var(--rule);">Reconcile live state to match Git. Manual or automated.</td></tr>
+<tr><td style="padding:0.4rem 0.6rem; border-bottom:1px solid var(--rule); font-weight:600;">Self-heal</td>
+<td style="padding:0.4rem 0.6rem; border-bottom:1px solid var(--rule);">Off by default. Reverts manual <code>kubectl</code> drift back to Git.</td></tr>
+<tr><td style="padding:0.4rem 0.6rem; font-weight:600;">Prune</td>
+<td style="padding:0.4rem 0.6rem;">Off by default (safety). Deletes live resources removed from Git.</td></tr>
+</table>
+
+<h2>One-sentence interview answer</h2>
+<p><em>"Argo CD picks up once there's a cluster and manifests to reconcile —
+everything before that (provisioning the cluster, networking, IAM) is still
+Terraform's job."</em></p>
+
+<h2>Worth knowing for follow-ups</h2>
+<ul>
+<li><strong>App-of-Apps</strong> — one root Application managing many child
+Applications, for scaling GitOps across many services/teams.</li>
+<li><strong>Sync waves / hooks</strong> — ordering control within a single
+sync (e.g. run a DB migration Job before the app Deployment rolls out).</li>
+<li><strong>Image Updater</strong> — a separate Argo CD component that can
+auto-bump image tags in Git when a new image is published, closing the loop
+without a human editing the manifest.</li>
+</ul>
+
+<p class="primary-source">Official docs:
+<a href="https://argo-cd.readthedocs.io/en/stable/core_concepts/" target="_blank" rel="noopener">Core Concepts</a> ·
+<a href="https://argo-cd.readthedocs.io/en/stable/user-guide/auto_sync/" target="_blank" rel="noopener">Automated Sync Policy</a></p>
+
+</body>
+</html>

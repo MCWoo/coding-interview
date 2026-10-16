@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Observability across two clouds</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<h1>Observability across two clouds</h1>
+<p class="lede">Lesson 3 of 3 — this is the requirement that never got
+addressed at all in session-08: "know what's actually running across both
+clouds without manually auditing each team's footprint."</p>
+
+<p>Unlike the Argo CD and Ansible gaps, this one wasn't a wrong answer — it
+was a blank. The goal here is just to have a baseline vocabulary and a
+first-pass design so the next session has something to say instead of
+silence.</p>
+
+<h2>The three signals, vendor-neutral</h2>
+
+<p>Before anything cloud-specific, there's a standard split (formalized by
+OpenTelemetry, now the common cross-vendor vocabulary for this) into three
+signal types:</p>
+
+<ul>
+<li><strong>Metrics</strong> — numbers measured over time (request count,
+latency, CPU). Cheap to collect and store, and the usual basis for
+alerting and dashboards.</li>
+<li><strong>Logs</strong> — discrete, timestamped records of specific
+events, carrying detail metrics can't (a stack trace, a failed query, the
+exact input that triggered an error).</li>
+<li><strong>Traces</strong> — the path of a single request as it crosses
+multiple services, each hop recorded as a "span," so you can see where time
+was actually spent across a distributed call.</li>
+</ul>
+
+<div class="callout recall">
+A useful one-line distinction: <strong>monitoring</strong> tells you a
+problem exists (a metric crossed a threshold); <strong>observability</strong>
+is having enough signal — usually a mix of all three — to figure out
+<em>why</em>, without having predicted the specific question in advance.
+</div>
+
+<div class="quiz" data-answer="traces">
+<p class="question">Fill in the blank: the signal type that records a single request's path across multiple services, as a sequence of spans, is called ____.</p>
+<form onsubmit="return checkQuiz(this)">
+  <input type="text" autocomplete="off">
+  <button type="submit">Check</button>
+  <p class="feedback"></p>
+</form>
+</div>
+
+<h2>Why "just use CloudWatch" doesn't solve the actual requirement</h2>
+
+<p>AWS ships CloudWatch; Azure ships Azure Monitor. Both are perfectly good
+at observing resources <em>within their own cloud</em>. Neither one knows
+anything about the other. If the platform's requirement is "what's running
+across AWS <em>and</em> Azure," a design that just says "use each cloud's
+native tool" has quietly answered a different, easier question.</p>
+
+<p>Two real approaches to the actual cross-cloud problem, roughly in order
+of how often they come up in practice:</p>
+
+<ol>
+<li><strong>A federation/aggregation layer</strong> — a vendor-neutral
+collector (an OpenTelemetry Collector is the common default) runs
+alongside workloads in both clouds and ships all three signal types to one
+shared backend, so there's a single pane of glass regardless of which cloud
+emitted the data.</li>
+<li><strong>A consistent resource-tagging scheme</strong> — this is the less
+glamorous half, and the one that's easy to skip in an interview answer: raw
+metrics/logs are useless for "what's running and whose is it" unless every
+resource in both clouds carries the same tags (owner, environment,
+cost-center) that a query layer can group by. No amount of pipeline
+sophistication fixes an untagged resource.</li>
+</ol>
+
+<div class="callout warning">
+Tagging consistency is infrastructure, not an observability tool — it's
+usually enforced at the same layer as the "security guardrails by default"
+requirement from the same problem (e.g. a Terraform module that refuses to
+provision a resource without the required tags). Worth connecting those two
+requirements explicitly in a design answer rather than treating them as
+unrelated asks.
+</div>
+
+<p class="primary-source">Primary sources — read before the next session:
+<a href="https://opentelemetry.io/docs/concepts/signals/" target="_blank" rel="noopener">OpenTelemetry: Concepts — Signals</a>
+(official docs, for the three-signal vocabulary) and
+<a href="https://prometheus.io/docs/introduction/overview/" target="_blank" rel="noopener">Prometheus: Overview</a>
+(official docs, for the metrics model most K8s-native tooling, including
+Argo CD itself, is built around).</p>
+
+<div class="quiz" data-answer="tagging">
+<p class="question">Fill in the blank: without a consistent resource ____ scheme across both clouds, no observability pipeline can answer "what's running and whose is it."</p>
+<form onsubmit="return checkQuiz(this)">
+  <input type="text" autocomplete="off">
+  <button type="submit">Check</button>
+  <p class="feedback"></p>
+</form>
+</div>
+
+<p class="ask-your-teacher">Ask if you want to go deeper on how Prometheus
+federation works specifically, or on the actual mechanics of an
+OpenTelemetry Collector pipeline — this lesson deliberately stayed at the
+"what to say in an interview" level rather than hands-on setup.</p>
+
+<div class="nav-links">
+  <span><a href="0002-ansible-idempotency-and-terraform-drift.html">← Back: Ansible idempotency</a></span>
+  <span><a href="0001-gitops-and-argocd-scope.html">↺ Restart: GitOps &amp; Argo CD scope</a></span>
+</div>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

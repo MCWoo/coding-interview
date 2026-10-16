@@ -91,6 +91,15 @@ invocation:
 Otherwise, just invoke it and answer the setup questions (language, timing,
 optionally a category) to start a session.
 
+## Learning workspace
+
+`learning/` is a separate teaching workspace (built with the `teach` skill)
+for following up on gaps a mock interview surfaces — e.g. after session-08
+flagged weak Argo CD/Ansible/observability understanding, `learning/`
+holds the mission, curated resources, and self-contained HTML lessons for
+closing those gaps. Not gitignored — unlike `session-NN/`, this is written
+material meant to persist and be revisited, not a hidden answer key.
+
 ## State
 
 Your candidate profile (per-category skill levels, session history, and

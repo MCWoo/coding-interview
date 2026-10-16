@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ansible cheat sheet</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<h1>Ansible cheat sheet</h1>
+<p class="lede">Quick reference — see
+<a href="../lessons/0002-ansible-idempotency-and-terraform-drift.html">Lesson 2</a>
+for the full explanation.</p>
+
+<h2>What it is</h2>
+<p>Configuration management: brings an <em>already-existing</em> machine
+(or API-managed resource) to a desired state. Contrast with Terraform, which
+provisions the resource's existence in the first place. In practice the
+line blurs (Ansible has cloud modules too), but this is the default split.</p>
+
+<h2>Idempotency</h2>
+<p>Running the same playbook twice should converge to the same end state as
+running it once. A task reports <code>changed</code> if it had to act, or
+<code>ok</code> if the system already matched. This is what makes re-running
+a playbook safe.</p>
+
+<div class="callout warning">
+Idempotency is a promise about <em>Ansible's own</em> view converging — it
+says nothing about a second tool (Terraform) independently re-asserting a
+different value for the same field. See Lesson 2 for the full drift bug
+this caused in session-08.
+</div>
+
+<h2>Core vocabulary</h2>
+<ul>
+<li><strong>Inventory</strong> — the list of hosts/targets a playbook runs against.</li>
+<li><strong>Playbook</strong> — an ordered list of tasks (YAML) to apply.</li>
+<li><strong>Role</strong> — a reusable, packaged bundle of tasks/files/templates.</li>
+<li><strong>Ansible Vault</strong> — encrypts sensitive variables/files at
+rest; the Ansible-native answer to "don't commit a plaintext secret"
+(<code>ansible-vault create|edit|view secret.yml</code>).</li>
+</ul>
+
+<h2>Push vs. pull</h2>
+<p>Ansible is push-based: a control node connects out (typically over SSH)
+and runs tasks. Contrast with Argo CD, which is pull-based: a controller
+inside the cluster continuously pulls toward the desired state. Naming this
+contrast out loud is good trade-off-reasoning material in a design
+interview.</p>
+
+<h2>The "two writers" smell</h2>
+<p>Before proposing Ansible (or any tool) to own a value, ask: does anything
+else in this design also write to the same field? If yes, that's the shape
+of the session-08 bug — not an Ansible-specific flaw, but a general
+architectural smell worth naming proactively.</p>
+
+<p class="primary-source">Official docs:
+<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_intro.html" target="_blank" rel="noopener">Introduction to Playbooks</a> ·
+<a href="https://docs.ansible.com/ansible/latest/vault_guide/vault.html" target="_blank" rel="noopener">Ansible Vault</a></p>
+
+</body>
+</html>
