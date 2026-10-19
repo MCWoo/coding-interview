@@ -2,6 +2,3 @@
 # solutions, hidden reference solutions, test harnesses) — personal
 # practice history, not part of the skill itself.
 session-[0-9][0-9]/
-
-# Local Claude Code settings override — machine-specific, not shared.
-.claude/settings.local.json
