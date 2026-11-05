@@ -69,6 +69,18 @@ pending that fire *after* the interview is already over — including,
 awkwardly, a "time's up" nudge or a silent-read pass landing in the middle
 of an unrelated conversation the candidate has with you afterward.
 
+Don't rely on memory alone for this, though, especially on a long session
+where the IDs were returned many turns before wrap-up and could get lost
+or mis-recalled: **`CronList` at wrap-up time is the authoritative source**,
+not whatever you remember creating. Use it to cross-check, and cancel
+whatever it actually shows as still scheduled rather than just the subset
+you happen to recall. This matters most for the one-shot timing nudges
+(halfway/10-min/2-min/end) — if wrap-up itself runs long (an offered
+extension, extra debrief discussion), one or more of those can still be
+sitting unfired at the moment you think you're done, and it's easy to
+cancel the recurring note-taking job, feel like you've "cleaned up," and
+forget the others were never confirmed gone.
+
 ## At wrap-up
 
 Before you give feedback (fold this into "Verify and read the final
@@ -82,9 +94,15 @@ your own live observations during the interview; don't feel obligated to
 cite every line if most of it was just "still writing the same function."
 
 Once you're done with it:
-1. **Cancel every cron job you created for this session** via
-   `CronDelete` on each tracked job ID — the periodic read especially must
-   not keep firing after the interview's over.
+1. **Cancel every cron job you created for this session.** Run `CronList`
+   first and treat its output as ground truth, not the job IDs you happen
+   to remember — then `CronDelete` every one of them: the recurring
+   note-taking job *and* every one-shot timing nudge (halfway/10-min/
+   2-min/end), including any that are still pending because wrap-up itself
+   ran long. `CronDelete` on a job that already auto-fired and expired is
+   harmless (it just won't be in the `CronList` output anymore), so there's
+   no downside to checking the full list rather than only the ones you
+   think are still outstanding.
 2. **Delete `.interviewer_notes` itself.** It's working scratch for this
    session, not a lasting artifact the way `PROBLEM.md` or the candidate's
    solution file are — once its content has fed into your feedback, it

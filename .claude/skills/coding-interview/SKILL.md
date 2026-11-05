@@ -70,6 +70,14 @@ prefers typing them that way.
      wrap up by 3:47 PM." See "Tracking time" below for how to actually keep
      to it — including for self-timed sessions, which still need a real
      start timestamp captured even though you won't be nagging about it.
+   - **IDE/editor.** Ask what they're using (VS Code, CLion, Vim/Emacs +
+     terminal, etc.) — read `references/ide_setup.md` for why this is worth
+     a question every single session (unlike the ones below, there's no
+     safe default to fall back on) and what to do with the answer. For VS
+     Code specifically, this is what lets you hand over a project that
+     builds with the right compiler from the first keystroke instead of
+     whatever an editor extension's auto-generated default task happens to
+     pick.
    - **Category** (optional). If the candidate wants to target something
      specific ("I want a graph problem", "let's do system design"), honor
      it. Otherwise let the profile drive the choice — don't ask "which
@@ -157,6 +165,12 @@ prefers typing them that way.
      pre-supplying them is as much a hint as naming the algorithm would be.
      Your own edge-case thinking belongs at the end, not here — see
      "Wrapping up" below.
+
+   If the candidate said they're using VS Code, also write the matching
+   `.vscode/tasks.json` (and `launch.json` for compiled languages) into the
+   session directory now, before handing anything over — see
+   `references/ide_setup.md` for the per-language templates and why this
+   step exists.
 
    Before handing the bundle over, run it yourself (Bash) to confirm the
    reference solution's outputs match the worked examples you just wrote in
@@ -300,12 +314,24 @@ escalate if they're still stuck after acting on it. If you find yourself
 about to say the name of the data structure or algorithm that solves the
 problem, stop — ask a question that would let *them* arrive at it instead.
 
-**If you do give away too much** (you named the technique, or basically
-described the algorithm), say so plainly to yourself for later — this
-matters when you assess the category at the end (see "Assessing
-performance"). A candidate who reached a solution mostly because you handed
-them the key insight didn't demonstrate what "proficient" requires, even if
-the resulting code was correct.
+Watch for a subtler version of the same mistake: a "question" that already
+states the insight. "Does X need to see Y's index too?" reads like a
+nudge, but it has told them the answer just as surely as a flat statement
+would — there's nothing left for them to figure out. A real nudge leaves the
+actual insight undiscovered; if the only thing missing after your question
+is "yes" or "no," you gave it away.
+
+**If you do give away too much** (you named the technique, basically
+described the algorithm, or asked a question that already contained the
+answer), say so plainly to yourself for later, in concrete terms: what
+exactly did you supply, and what did the candidate actually contribute in
+response. This matters in two separate places at the end — it caps how high
+you can assess the category (see "Assessing performance"), and it determines
+what you can honestly credit the candidate with in the feedback itself (see
+"Give feedback"). A candidate who reached a solution mostly because you
+handed them the key insight didn't demonstrate what "proficient" requires,
+even if the resulting code was correct, and they also didn't "find" or
+"notice" that insight themselves — don't write feedback that says they did.
 
 **Thinking aloud.** Candidates will type their reasoning as they go — that's
 the equivalent of thinking aloud in a real interview room. Mostly just
@@ -435,7 +461,15 @@ When the problem session actually ends:
 
 2. **Give feedback**, covering:
    - What went well (be specific — cite what they actually did, not generic
-     praise)
+     praise). Before crediting a specific insight to the candidate ("you
+     noticed that...", "you found...", "you independently reasoned..."),
+     check it against what you actually said during the interview. If you
+     supplied that insight yourself — even phrased as a leading question
+     (see "Nudges, not answers") — say so accurately instead: credit them
+     for following it, applying it, or reaching the conclusion *given* that
+     starting point, not for originating it. Getting this backwards doesn't
+     just flatter the candidate; it corrupts the record future sessions
+     calibrate against.
    - What could improve (specific gaps: a missed edge case, a suboptimal
      complexity they didn't notice, communication that was hard to follow)
    - How to improve it (concrete: "practice more graph traversal problems",
