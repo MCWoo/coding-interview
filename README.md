@@ -89,7 +89,11 @@ invocation:
   starting a session
 
 Otherwise, just invoke it and answer the setup questions (language, timing,
-optionally a category) to start a session.
+IDE/editor, optionally a category) to start a session. If you're using VS
+Code, the skill writes a matching `.vscode/tasks.json` (and `launch.json`
+for compiled languages) into the session directory so the build task uses
+the right compiler from the first keystroke, rather than relying on the
+C/C++ extension's auto-generated default.
 
 ## Learning workspace
 
