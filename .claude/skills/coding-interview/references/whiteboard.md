@@ -62,9 +62,24 @@ up fine — but writing it straight to a `.svg` file produces a blank or
 broken image for the candidate. Don't save it as a final artifact; see
 "Saving the final diagram" below for the actual mechanism.
 
-A different whiteboard MCP (not Miro) may expose a different tool
-surface — apply the same principle (read-only tools, structured content
-over a screenshot) rather than looking for these exact names.
+**Only the Miro MCP path above has actually been exercised end-to-end**
+(see "Why this exists" — verified live against a real board, including
+catching the `canvas_read_as_svg`-isn't-renderable bug above). A different
+whiteboard MCP would presumably expose a comparable read-only surface
+(some `*_search`/`*_read` pair), and the same principles should apply —
+but treat its exact tool names, output shape, and any export/save
+behavior as unverified until an actual session has run against it. Don't
+assume it works the same way Miro's does on a detail that matters (like
+the final-save mechanism) without checking.
+
+**If no whiteboard MCP turns up at all, mention that installing Miro's
+gets the most reliable experience** before falling back to the browser —
+something like "I don't see a whiteboard integration configured; Miro's
+MCP server (`claude mcp add --transport http miro https://mcp.miro.com -s user`,
+then `/mcp` to authenticate) gives the most reliable reads if you want to
+set that up before next time — for now, I'll just look at your screen."
+Don't block *this* session on it either way; move straight to the browser
+fallback below regardless of their answer.
 
 **Otherwise, use Claude in Chrome** (the common case today — don't block
 the session waiting for an MCP that probably isn't configured). Load the
@@ -145,10 +160,11 @@ browser for this one step:
 1. Load the Claude-in-Chrome tools if you haven't already (one
    `ToolSearch` call for the usual set).
 2. Open the candidate's board URL in a new tab.
-3. Give it a moment to load, then press `Shift+1` (Miro's zoom-to-fit
-   shortcut) so the whole diagram is in frame — the default view after
-   loading is often centered somewhere that doesn't show all the content,
-   especially if the candidate panned around while building it.
+3. Give it a moment to load, then use that tool's zoom-to-fit shortcut
+   (`Shift+1` in Miro; check for an equivalent in whatever else the
+   candidate's using) so the whole diagram is in frame — the default view
+   after loading is often centered somewhere that doesn't show all the
+   content, especially if the candidate panned around while building it.
 4. Take a screenshot with `save_to_disk: true` and copy the saved file to
    `<problem-dir>/whiteboard_final.png`.
 5. Close the tab you opened for this (see the `claude-in-chrome` skill on
