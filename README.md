@@ -26,8 +26,9 @@ sessions so difficulty ramps appropriately over time.
 - At wrap-up: verifies your final solution (including edge cases you didn't
   think to test, checked in a scratch harness — never edited into your
   files), asks about time/space complexity, gives direct feedback on your
-  approach and code quality, and updates your tracked skill level for that
-  category.
+  approach and code quality, updates your tracked skill level for that
+  category, and saves that same feedback as `FEEDBACK.md` in the session
+  directory so it's there to reread alongside the code later.
 - For system design and OOP design problems, optionally supports diagramming
   on a real online whiteboard instead of ASCII in chat — reads the board
   periodically, nudges on the diagram the same way it nudges on code, and
@@ -68,6 +69,10 @@ them) holds:
   examples from the problem statement
 - `whiteboard_final.png` — for a system design or OOP design session
   where you used an online whiteboard, a screenshot of the final diagram
+- `FEEDBACK.md` — the full debrief from wrap-up (what went well, what to
+  improve, code/diagram quality, level before → after), saved so you can
+  reread it alongside the rest of the session later instead of only
+  through `--notes`
 
 `session-NN/` directories are gitignored: they're personal practice
 history (including hidden answer keys), not part of the skill.

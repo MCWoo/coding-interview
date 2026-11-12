@@ -540,6 +540,22 @@ When the problem session actually ends:
    is theirs to read now, in case they want to compare notes or study it
    later — the honor system was only ever about the session itself.
 
+   **Also save the feedback itself as `<problem-dir>/FEEDBACK.md`.** The
+   candidate profile's `notes` command already surfaces this feedback
+   later, but only by re-reading the whole session history out of
+   `manage_state.py` — there's no reason a candidate rereading *this*
+   session's files later (to study `interviewer_only/`, compare the
+   diagram, whatever) should have to go somewhere else just to see what
+   they were told about it. Write the same feedback you just gave in chat
+   from step 2, not a shortened recap — this is the lasting copy, not a
+   teaser for one. Lead with a short header (problem title, category,
+   difficulty, date, duration, level before → after), then the What went
+   well / What could improve / How to improve / code-and-tests sections in
+   the same shape as the chat version. Like `whiteboard_final.png`, this
+   isn't scratch — it persists in the session directory, and there's no
+   honor-system framing needed since it's the candidate's own feedback,
+   not a hidden answer key.
+
 ## Checking progress outside a session
 
 If the candidate just wants to see where they stand (not run a new
