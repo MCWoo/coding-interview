@@ -7,8 +7,8 @@ plus system design/OOP/senior scenarios. They cover the common case, but
 they're not the whole space: a candidate can add their own categories for
 whatever they're actually specializing in (game physics, network
 engineering, graphics, distributed systems, anything pulled from a job
-description) via `manage_state.py add-category`. See "Custom categories &
-specializing from a job description" in `SKILL.md` for that workflow. Once
+description) via `manage_state.py add-category`. See
+`references/custom_categories.md` for that workflow. Once
 added, a custom category is tracked exactly like these built-in ones — same
 five-level ladder, same weighted selection, nothing here treats them
 differently.
