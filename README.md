@@ -28,6 +28,12 @@ sessions so difficulty ramps appropriately over time.
   files), asks about time/space complexity, gives direct feedback on your
   approach and code quality, and updates your tracked skill level for that
   category.
+- For system design and OOP design problems, optionally supports diagramming
+  on a real online whiteboard (Miro, Excalidraw, FigJam, or anything else)
+  instead of ASCII in chat — reads the board periodically (via an MCP like
+  Miro's if one's configured, or a browser screenshot otherwise), nudges on
+  the diagram the same way it nudges on code, and saves the final diagram
+  into the session directory at wrap-up.
 - For system design (no test suite to fall back on), assesses against the
   six axes real system design loops actually score — requirements
   gathering, architecture, deep-dive depth, trade-off reasoning,
@@ -54,6 +60,8 @@ them) holds:
   (honor system — don't open it)
 - `run_tests.<ext>` — compiles/runs your solution against the worked
   examples from the problem statement
+- `whiteboard_final.png` — for a system design or OOP design session
+  where you used an online whiteboard, a screenshot of the final diagram
 
 `session-NN/` directories are gitignored: they're personal practice
 history (including hidden answer keys), not part of the skill.
