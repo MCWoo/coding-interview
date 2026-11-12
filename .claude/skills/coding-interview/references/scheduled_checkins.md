@@ -36,6 +36,11 @@ exists to prevent many different users' sessions from all hitting the API
 in the same instant — that's not really a concern for a single candidate's
 private note-taking job, so don't overthink the exact schedule here.
 
+If a whiteboard is in use this session (see `references/whiteboard.md`),
+extend this same recurring job's prompt to also capture the board's
+current state and append it to the same `.interviewer_notes` file,
+alongside the code observations — not a second, separate cron job.
+
 **Timed sessions only (60/90 min) — proactive time nudges**, computed from
 the real clock (same `date -d "+N minutes"` arithmetic you already use to
 state the end time):

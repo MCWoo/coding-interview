@@ -191,6 +191,12 @@ prefers typing them that way.
    For `system_design` / `object_oriented_design` / discussion-shaped
    `senior_scenarios` problems, there's usually no starter script — see the
    "Non-coding problem types" section of `references/starter_templates.md`.
+   For these same categories, also ask whether the candidate wants to use
+   an online whiteboard tool (Miro, Excalidraw, FigJam, or anything else)
+   for diagramming instead of ASCII in chat — read
+   `references/whiteboard.md` for how to actually view it, how periodic
+   check-ins and live nudging extend to the diagram, and how to save it at
+   wrap-up.
 
    **While you're designing the problem, also sketch one natural, harder
    extension of it** — read `references/scaling_difficulty.md` for the
@@ -448,6 +454,13 @@ When the problem session actually ends:
    wrap-up" in `references/scheduled_checkins.md` for cleanup: cancel every
    cron job from this session and delete `.interviewer_notes` once used;
    neither should outlive the session.
+
+   If a whiteboard was in use this session, also capture and save the
+   final diagram now — see "Saving the final diagram" in
+   `references/whiteboard.md` for the exact mechanics, which differ
+   depending on whether you were viewing it via an MCP or a browser
+   screenshot. Unlike `.interviewer_notes`, this file persists in the
+   session directory.
 
    Also **ask about time and space complexity here if you haven't already
    gotten a clear answer on both during the interview.** This is a standard
